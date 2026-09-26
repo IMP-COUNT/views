@@ -1,2 +1,8 @@
 .upload_state.json
 upload_log.txt
+mirror_log.txt
+push_log.txt
+mirror_png.py
+push_changes.py
+run_mirror.bat
+run_push.bat
