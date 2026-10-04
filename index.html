@@ -24,30 +24,9 @@
 
     <h2>IMP-COUNT Views</h2>
 
-    <p id="update-date"></p>
-
-    <!-- 画像は後で追加する -->
     <img src="Spotify.png" alt="Spotify">
     <img src="YouTube.png" alt="YouTube">
     <img src="Oshiriku.png" alt="Oshiriku">
-
-    <script>
-        const days = ['日', '月', '火', '水', '木', '金', '土'];
-        const owner = "IMP-COUNT";
-        const repo = "views";
-        const branch = "main";
-
-        fetch(`https://api.github.com/repos/${owner}/${repo}/commits?sha=${branch}&per_page=1`)
-            .then(res => res.json())
-            .then(data => {
-                const date = new Date(data[0].commit.author.date);
-                const text = `${date.getMonth() + 1}/${date.getDate()} (${days[date.getDay()]})更新`;
-                document.getElementById('update-date').textContent = text;
-            })
-            .catch(() => {
-                document.getElementById('update-date').textContent = '';
-            });
-    </script>
 
 </body>
 </html>
