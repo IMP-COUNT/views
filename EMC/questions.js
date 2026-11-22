@@ -1,5 +1,3 @@
-alert("questions.js 読み込み成功");
-
 var questions = [
 {
 q:"テスト問題",
