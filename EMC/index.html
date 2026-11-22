@@ -3,38 +3,69 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>iNARTE EMC 問題集</title>
 
 <style>
+
 body{
-    font-family: sans-serif;
-    max-width:700px;
-    margin:auto;
-    padding:20px;
+    margin:0;
+    padding:15px;
     background:#f5f5f5;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+}
+
+h1{
+    text-align:center;
+    font-size:32px;
+}
+
+.score{
+    text-align:right;
+    font-size:20px;
+    margin-bottom:15px;
 }
 
 .card{
     background:white;
     padding:20px;
-    border-radius:12px;
-    box-shadow:0 2px 10px rgba(0,0,0,.1);
+    border-radius:16px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.1);
 }
 
-h1{
-    text-align:center;
+#qNo{
+    font-size:26px;
+    margin-bottom:10px;
+}
+
+#question{
+    line-height:1.8;
+    font-size:20px;
+    margin-bottom:20px;
 }
 
 .choice{
+    display:block;
     width:100%;
-    text-align:left;
-    padding:12px;
-    margin:8px 0;
-    border:1px solid #ccc;
-    border-radius:8px;
+    box-sizing:border-box;
+
+    padding:15px;
+    margin-bottom:12px;
+
+    border:1px solid #cccccc;
+    border-radius:10px;
+
     background:white;
+
+    text-align:left;
+    font-size:18px;
+
     cursor:pointer;
-    font-size:16px;
 }
 
 .choice:hover{
@@ -51,207 +82,83 @@ h1{
 
 #result{
     margin-top:15px;
+    font-size:24px;
     font-weight:bold;
 }
 
 #explanation{
     margin-top:15px;
-    line-height:1.6;
+    line-height:1.8;
+    font-size:17px;
 }
 
 #nextBtn{
+    width:100%;
     margin-top:20px;
-    padding:10px 20px;
-    font-size:16px;
+
+    padding:15px;
+
+    border:none;
+    border-radius:10px;
+
+    background:#0078d4;
+    color:white;
+
+    font-size:20px;
+    cursor:pointer;
 }
 
-.score{
-    text-align:right;
-    margin-bottom:10px;
+#nextBtn:hover{
+    opacity:0.9;
 }
+
+.footer{
+    text-align:center;
+    margin-top:15px;
+    color:#666;
+}
+
 </style>
 </head>
 
 <body>
 
+<div class="container">
+
 <h1>iNARTE EMC 問題集</h1>
 
 <div class="score">
-正解数:
+正解数：
 <span id="score">0</span>
 </div>
 
 <div class="card">
 
-<h2 id="qNo"></h2>
+<div id="qNo"></div>
+
 <div id="question"></div>
 
 <div id="choices"></div>
 
 <div id="result"></div>
+
 <div id="explanation"></div>
 
-<button id="nextBtn" onclick="nextQuestion()" style="display:none;">
+<button id="nextBtn" style="display:none;">
 次の問題
 </button>
 
 </div>
 
-<script>
+<div class="footer">
+問題数：
+<span id="totalCount">0</span>
+</div>
 
-const questions = [
+</div>
 
-{
-q:"自由空間を伝搬する60MHzの電磁波の波長は？",
-choices:[
-"5m",
-"0.2m",
-"5000m",
-"50m"
-],
-answer:0,
-exp:"波長＝光速÷周波数。3×10^8 ÷ 60×10^6 = 5m"
-},
-
-{
-q:"微小ダイポール近傍で優勢になりやすいのは？",
-choices:[
-"磁界",
-"電界",
-"どちらも同じ",
-"周波数だけで決まる"
-],
-answer:1,
-exp:"微小ダイポールでは電界優勢、微小ループでは磁界優勢。"
-},
-
-{
-q:"30MHzの波長は？",
-choices:[
-"1m",
-"10m",
-"30m",
-"100m"
-],
-answer:1,
-exp:"3×10^8 ÷ 30×10^6 = 10m"
-},
-
-{
-q:"放射電力10W、距離10mの電界強度は？",
-choices:[
-"1.73V/m",
-"17.3V/m",
-"30V/m",
-"0.173V/m"
-],
-answer:0,
-exp:"E=√(30P)/d より 1.73V/m"
-},
-
-{
-q:"2mV/mは何dBμV/mか？",
-choices:[
-"46",
-"60",
-"66",
-"33"
-],
-answer:2,
-exp:"2mV/m=2000μV/m → 20log(2000)=66dBμV/m"
-}
-
-];
-
-let current=0;
-let score=0;
-
-function showQuestion(){
-
-const q=questions[current];
-
-document.getElementById("qNo").innerText=
-`問${current+1}`;
-
-document.getElementById("question").innerText=q.q;
-
-document.getElementById("result").innerHTML="";
-document.getElementById("explanation").innerHTML="";
-document.getElementById("nextBtn").style.display="none";
-
-const choices=document.getElementById("choices");
-choices.innerHTML="";
-
-q.choices.forEach((c,index)=>{
-
-const btn=document.createElement("button");
-
-btn.className="choice";
-btn.innerText=c;
-
-btn.onclick=()=>checkAnswer(index);
-
-choices.appendChild(btn);
-
-});
-
-}
-
-function checkAnswer(index){
-
-const q=questions[current];
-
-const buttons=document.querySelectorAll(".choice");
-
-buttons.forEach(btn=>btn.disabled=true);
-
-buttons[q.answer].classList.add("correct");
-
-if(index===q.answer){
-
-score++;
-document.getElementById("score").innerText=score;
-
-document.getElementById("result").innerHTML=
-"⭕ 正解";
-
-}else{
-
-buttons[index].classList.add("wrong");
-
-document.getElementById("result").innerHTML=
-"❌ 不正解";
-}
-
-document.getElementById("explanation").innerHTML=
-"<b>解説</b><br>"+q.exp;
-
-document.getElementById("nextBtn").style.display="inline-block";
-
-}
-
-function nextQuestion(){
-
-current++;
-
-if(current>=questions.length){
-
-document.querySelector(".card").innerHTML=
-`
-<h2>終了</h2>
-<p>正解数 ${score} / ${questions.length}</p>
-`;
-
-return;
-}
-
-showQuestion();
-
-}
-
-showQuestion();
-
-</script>
+<script src="questions.js"></script>
+<script src="app.js"></script>
 
 </body>
 </html>
