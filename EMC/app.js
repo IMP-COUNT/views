@@ -1,3 +1,4 @@
+alert("app.js 読み込み成功");
 var current = 0;
 var score = 0;
 
