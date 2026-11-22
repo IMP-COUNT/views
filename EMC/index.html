@@ -1,24 +1,239 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>EMC問題集</title>
+
+<style>
+
+body{
+    font-family:sans-serif;
+    max-width:900px;
+    margin:auto;
+    padding:20px;
+}
+
+h1{
+    text-align:center;
+}
+
+#qno{
+    font-size:24px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+#question{
+    font-size:20px;
+    margin-bottom:20px;
+    line-height:1.7;
+}
+
+.choice{
+    display:block;
+    width:100%;
+    margin:10px 0;
+    padding:15px;
+    font-size:18px;
+}
+
+#answer{
+    margin-top:20px;
+    font-size:18px;
+    color:blue;
+}
+
+#nav{
+    margin-top:20px;
+}
+
+button{
+    padding:10px 20px;
+    font-size:18px;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>EMC問題集</h1>
+
+<div id="qno"></div>
+
+<div id="question"></div>
+
+<div id="choices"></div>
+
+<div id="answer"></div>
+
+<div id="nav">
+<button onclick="prevQuestion()">←前へ</button>
+<button onclick="nextQuestion()">次へ→</button>
+</div>
+
 <script>
+
+var questions = [
+
+{
+q:"自由空間を伝搬する周波数60MHzの電磁波について、波長として正しいものは？",
+choices:["5m","0.2m","5000m","50m"],
+answer:"① 5m",
+exp:"波長＝3×10⁸÷(60×10⁶)=5m"
+},
+
+{
+q:"微小ダイポールと微小ループの近傍界について正しいものは？",
+choices:[
+"微小ダイポールでは磁界が優勢",
+"微小ループでは電界が優勢",
+"微小ダイポールでは電界、微小ループでは磁界が優勢",
+"周波数だけで決まる"
+],
+answer:"③",
+exp:"微小ダイポールでは電界、微小ループでは磁界が優勢。"
+},
+
+{
+q:"30MHzの微小放射源の近傍界と遠方界の境界距離は？",
+choices:["10m","1.6m","3.2m","5.0m"],
+answer:"② 1.6m",
+exp:"波長10m、境界距離=10/(2π)≒1.6m"
+},
+
+{
+q:"放射電力10W、距離10mの等方性アンテナの電界強度は？",
+choices:["1.73V/m","30V/m","17.3V/m","0.173V/m"],
+answer:"① 1.73V/m",
+exp:"E=√(30P)/d=1.73V/m"
+},
+
+{
+q:"2mV/mをdBμV/mへ換算すると？",
+choices:["33dBμV/m","6dBμV/m","66dBμV/m","46dBμV/m"],
+answer:"③ 66dBμV/m",
+exp:"20log10(2000)=66dBμV/m"
+},
+
+{
+q:"遠方界の平面波に関する正しい説明は？",
+choices:[
+"電界と磁界は進行方向に平行",
+"電界だけ進行方向に平行",
+"電界と磁界は互いに直交し進行方向にも直交",
+"電界と磁界は平行"
+],
+answer:"③",
+exp:"遠方界では電界・磁界・進行方向が直交する。"
+},
+
+{
+q:"アンテナ利得と指向性の関係で誤っているものは？",
+choices:[
+"損失が増えると利得は低下する",
+"利得は指向性と放射効率に関係する",
+"放射効率が低くても利得は指向性より大きくなる",
+"損失が無ければ一致する"
+],
+answer:"③",
+exp:"利得は指向性より大きくならない。"
+},
+
+{
+q:"半波長ダイポールの共振状態について誤っているものは？",
+choices:[
+"給電点リアクタンスを大きくする",
+"リアクタンスはほぼゼロ",
+"効率よく放射する",
+"入力インピーダンスは抵抗性"
+],
+answer:"①",
+exp:"共振時のリアクタンスはほぼゼロ。"
+},
+
+{
+q:"50Ω線路に150Ω負荷を接続した場合の反射係数は？",
+choices:["0.50","0.67","3.00","0.33"],
+answer:"① 0.50",
+exp:"|(150-50)/(150+50)|=0.50"
+},
+
+{
+q:"反射係数0.2のVSWRは？",
+choices:["0.67","1.2","5.0","1.5"],
+answer:"④ 1.5",
+exp:"(1+0.2)/(1-0.2)=1.5"
+}
+
+];
 
 var current = 0;
 
-var questions = [
-{
-q:"テスト問題",
-choices:["A","B","C","D"],
-answer:0,
-exp:"テスト解説"
-}
-];
-
 function showQuestion(){
 
+document.getElementById("qno").innerHTML =
+"問 " + (current+1);
+
 document.getElementById("question").innerHTML =
-"<h2>問"+(current+1)+"</h2>" +
 questions[current].q;
+
+var html="";
+
+for(var i=0;i<questions[current].choices.length;i++){
+
+html += "<button class='choice' onclick='showAnswer()'>"
+ + questions[current].choices[i]
+ + "</button>";
+
+}
+
+document.getElementById("choices").innerHTML=
+html;
+
+document.getElementById("answer").innerHTML="";
+
+}
+
+function showAnswer(){
+
+document.getElementById("answer").innerHTML =
+"<b>正解：</b>" +
+questions[current].answer +
+"<br><br>" +
+questions[current].exp;
+
+}
+
+function nextQuestion(){
+
+if(current < questions.length-1){
+
+current++;
+
+showQuestion();
+
+}
+
+}
+
+function prevQuestion(){
+
+if(current > 0){
+
+current--;
+
+showQuestion();
+
+}
 
 }
 
 showQuestion();
 
 </script>
+
+</body>
+</html>
